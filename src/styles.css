@@ -1,1 +1,302 @@
-/* You can add global styles to this file, and also import other style files */
+/* =========================================================
+   Colmena · Sistema de diseño global
+   1. Tokens  2. Base  3. Página  4. Botones  5. Campos
+   6. Tarjetas, chips y alertas  7. Tabla  8. Estados  9. Utilidades
+   ========================================================= */
+
+/* ---------- 1. Tokens ---------- */
+:root {
+  /* Marca */
+  --tinta: #1d1b2f;
+  --tinta-suave: #2e2b45;
+  --miel: #f4a62a;
+  --miel-oscura: #9a5b06;
+  --miel-clara: #fdf1dc;
+
+  /* Neutros */
+  --fondo: #f8f6f1;
+  --superficie: #ffffff;
+  --texto: #1d1b2f;
+  --texto-suave: #6b6880;
+  --borde: #e9e4da;
+
+  /* Estados: color oscuro para texto + color claro para fondo */
+  --exito: #1f7a52;
+  --exito-claro: #e3f4ec;
+  --peligro: #b42318;
+  --peligro-claro: #fdecea;
+  --neutro: #5f6470;
+  --neutro-claro: #eef0f3;
+
+  /* Tipografía */
+  --fuente: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --texto-xs: 0.75rem;
+  --texto-sm: 0.875rem;
+  --texto-base: 1rem;
+  --texto-lg: 1.25rem;
+  --texto-xl: 1.75rem;
+
+  /* Espaciado: múltiplos de 8 px */
+  --espacio-xs: 8px;
+  --espacio-sm: 16px;
+  --espacio-md: 24px;
+  --espacio-lg: 40px;
+
+  /* Forma y movimiento */
+  --radio: 16px;
+  --radio-sm: 10px;
+  --radio-pildora: 999px;
+  --sombra: 0 6px 20px rgba(29, 27, 47, 0.06);
+  --transicion: 0.2s ease;
+  --anillo-foco: 0 0 0 3px rgba(244, 166, 42, 0.45);
+}
+
+/* ---------- 2. Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--fuente);
+  font-size: var(--texto-base);
+  line-height: 1.6;
+  color: var(--texto);
+  background: var(--fondo);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--miel);
+  outline-offset: 2px;
+}
+
+/* ---------- 3. Página ---------- */
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+}
+
+.encabezado-pagina {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--espacio-sm);
+  margin-bottom: var(--espacio-md);
+}
+
+.titulo-pagina {
+  font-size: var(--texto-xl);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.subtitulo {
+  color: var(--texto-suave);
+}
+
+/* ---------- 4. Botones ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border: 1px solid transparent;
+  border-radius: var(--radio-sm);
+  font-size: var(--texto-sm);
+  font-weight: 700;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--transicion), border-color var(--transicion);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn-primario {
+  background: var(--tinta);
+  color: #ffffff;
+}
+
+.btn-primario:hover:not(:disabled) {
+  background: var(--tinta-suave);
+}
+
+.btn-secundario {
+  background: var(--superficie);
+  border-color: var(--borde);
+}
+
+.btn-secundario:hover:not(:disabled) {
+  border-color: var(--tinta);
+}
+
+.btn-peligro {
+  background: var(--peligro-claro);
+  color: var(--peligro);
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: var(--texto-xs);
+}
+
+/* ---------- 5. Campos ---------- */
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.campo > span {
+  font-size: var(--texto-sm);
+  font-weight: 700;
+}
+
+.campo input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-sm);
+  background: var(--superficie);
+  transition: border-color var(--transicion), box-shadow var(--transicion);
+}
+
+.campo input:focus {
+  outline: none;
+  border-color: var(--miel);
+  box-shadow: var(--anillo-foco);
+}
+
+/* ---------- 6. Tarjetas, chips y alertas ---------- */
+.tarjeta {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: var(--radio-pildora);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.chip-miel {
+  background: var(--miel-clara);
+  color: var(--miel-oscura);
+}
+
+.chip-exito {
+  background: var(--exito-claro);
+  color: var(--exito);
+}
+
+.chip-neutro {
+  background: var(--neutro-claro);
+  color: var(--neutro);
+}
+
+.chip-tinta {
+  background: var(--tinta);
+  color: #ffffff;
+}
+
+.alerta {
+  padding: 12px var(--espacio-sm);
+  border-radius: var(--radio-sm);
+  margin-bottom: var(--espacio-md);
+}
+
+.alerta-error {
+  background: var(--peligro-claro);
+  color: var(--peligro);
+}
+
+/* ---------- 7. Tabla ---------- */
+.tabla-contenedor {
+  overflow-x: auto;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--texto-sm);
+}
+
+.tabla th,
+.tabla td {
+  padding: 14px var(--espacio-sm);
+  text-align: left;
+  border-bottom: 1px solid var(--borde);
+}
+
+.tabla th {
+  color: var(--texto-suave);
+  font-size: var(--texto-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tabla tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ---------- 8. Estados: vacío y carga ---------- */
+.estado-vacio {
+  padding: var(--espacio-lg);
+  text-align: center;
+  color: var(--texto-suave);
+  border: 1px dashed var(--borde);
+  border-radius: var(--radio);
+}
+
+.esqueleto {
+  border-radius: var(--radio);
+  background: linear-gradient(90deg, var(--neutro-claro) 25%, #f7f8fa 50%, var(--neutro-claro) 75%);
+  background-size: 200% 100%;
+  animation: brillo 1.4s ease-in-out infinite;
+}
+
+@keyframes brillo {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* ---------- 9. Utilidades ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

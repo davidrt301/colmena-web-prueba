@@ -1,0 +1,92 @@
+/* ---------- Las cuatro tarjetas: se acomodan solas según el ancho ---------- */
+.indicadores {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--espacio-sm);
+    margin-bottom: var(--espacio-md);
+  }
+  
+  .indicador {
+    display: flex;
+    flex-direction: column;
+    padding: var(--espacio-sm) var(--espacio-md);
+  }
+  
+  .indicador.destacado {
+    background: var(--tinta);
+    color: #ffffff;
+  }
+  
+  .numero {
+    font-size: var(--texto-xl);
+    font-weight: 800;
+  }
+  
+  .etiqueta {
+    color: var(--texto-suave);
+    font-size: var(--texto-sm);
+  }
+  
+  .destacado .etiqueta {
+    color: var(--miel);
+  }
+  
+  /* ---------- Ocupación: una barra por espacio, solo con CSS ---------- */
+  .ocupacion {
+    padding: var(--espacio-md);
+  }
+  
+  .titulo-seccion {
+    margin-bottom: var(--espacio-sm);
+    font-size: var(--texto-lg);
+  }
+  
+  .barras {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .fila {
+    display: grid;
+    grid-template-columns: 160px 1fr 170px;
+    align-items: center;
+    gap: var(--espacio-sm);
+  }
+  
+  .pista {
+    height: 14px;
+    border-radius: 999px;
+    background: var(--borde);
+    overflow: hidden;
+  }
+  
+  .relleno {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--miel);
+  }
+  
+  .dato {
+    color: var(--texto-suave);
+    font-size: var(--texto-sm);
+    text-align: right;
+  }
+  
+  .panel-esqueleto {
+    height: 320px;
+  }
+  
+  /* ---------- En el celular, nombre y dato van encima de la barra ---------- */
+  @media (max-width: 640px) {
+    .fila {
+      grid-template-columns: 1fr auto;
+    }
+  
+    .pista {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+  }

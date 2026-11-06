@@ -1,0 +1,58 @@
+<header class="encabezado-pagina">
+    <div>
+      <h1 class="titulo-pagina">Mis reservas</h1>
+      <p class="subtitulo">Tus próximas reservas y las que ya pasaron</p>
+    </div>
+    <a routerLink="/espacios" class="btn btn-primario">Reservar otro espacio</a>
+  </header>
+  
+  @if (error()) {
+    <p class="alerta alerta-error" role="alert">{{ error() }}</p>
+  }
+  
+  @if (cargando()) {
+    <div class="esqueleto lista-esqueleto"></div>
+  } @else {
+    <ul class="lista">
+      @for (r of reservas(); track r.id) {
+        <li class="tarjeta reserva" [class.cancelada]="r.estado === 'CANCELADA'" data-testid="reserva">
+          <div class="principal">
+            <h2 class="nombre">{{ r.espacioNombre }}</h2>
+            <p class="cuando">
+              {{ dia(r.fecha) }} · {{ r.horaInicio.slice(0, 5) }} – {{ r.horaFin.slice(0, 5) }}
+              · {{ r.asistentes }} {{ r.asistentes === 1 ? 'persona' : 'personas' }}
+            </p>
+          </div>
+  
+          <strong class="valor">{{ pesos(r.valorTotal) }}</strong>
+  
+          <span class="chip estado" [class.chip-exito]="r.estado === 'CONFIRMADA'"
+                [class.chip-neutro]="r.estado === 'CANCELADA'" data-testid="estado-reserva">
+            {{ r.estado === 'CONFIRMADA' ? 'Confirmada' : 'Cancelada' }}
+          </span>
+  
+          <div class="acciones">
+            @if (sePuedeCancelar(r)) {
+              @if (porConfirmar() === r.id) {
+                <span class="pregunta">¿Cancelar esta reserva?</span>
+                <button type="button" class="btn btn-peligro btn-sm" data-testid="confirmar-cancelacion"
+                        (click)="confirmarCancelacion(r)">
+                  Sí, cancelar
+                </button>
+                <button type="button" class="btn btn-secundario btn-sm" (click)="porConfirmar.set(null)">No</button>
+              } @else {
+                <button type="button" class="btn btn-secundario btn-sm" data-testid="boton-cancelar"
+                        (click)="porConfirmar.set(r.id)">
+                  Cancelar
+                </button>
+              }
+            }
+          </div>
+        </li>
+      } @empty {
+        <li class="estado-vacio" data-testid="sin-reservas">
+          Todavía no tienes reservas. Escoge un espacio para empezar.
+        </li>
+      }
+    </ul>
+  }

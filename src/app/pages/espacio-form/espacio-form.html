@@ -1,0 +1,52 @@
+<a routerLink="/espacios" class="volver">← Volver a espacios</a>
+
+@if (!id() || espacio()) {
+  <form class="tarjeta formulario" (submit)="guardar($event)">
+    <h1 class="titulo-pagina">{{ id() ? 'Editar espacio' : 'Nuevo espacio' }}</h1>
+
+    <label class="campo">
+      <span>Nombre</span>
+      <input name="nombre" required maxlength="80" [value]="espacio()?.nombre ?? ''">
+    </label>
+
+    <label class="campo">
+      <span>Tipo</span>
+      <select name="tipo" required>
+        @for (t of tipos; track t[0]) {
+          <option [value]="t[0]" [selected]="espacio()?.tipo === t[0]">{{ t[1] }}</option>
+        }
+      </select>
+    </label>
+
+    <div class="pareja">
+      <label class="campo">
+        <span>Capacidad (personas)</span>
+        <input name="capacidad" type="number" required min="1" max="200" [value]="espacio()?.capacidad ?? 1">
+      </label>
+      <label class="campo">
+        <span>Precio por hora</span>
+        <input name="precioHora" type="number" required min="1000" step="500" [value]="espacio()?.precioHora ?? 30000">
+      </label>
+    </div>
+
+    <label class="campo">
+      <span>Descripción (opcional)</span>
+      <textarea name="descripcion" rows="3" maxlength="500" [value]="espacio()?.descripcion ?? ''"></textarea>
+    </label>
+
+    <label class="campo">
+      <span>Enlace de la foto (opcional)</span>
+      <input name="imagenUrl" type="url" maxlength="300" [value]="espacio()?.imagenUrl ?? ''">
+    </label>
+
+    @if (errorServidor()) {
+      <p class="alerta alerta-error" role="alert" data-testid="error-espacio">{{ errorServidor() }}</p>
+    }
+
+    <button type="submit" class="btn btn-primario" [disabled]="enviando()">
+      {{ enviando() ? 'Guardando...' : 'Guardar espacio' }}
+    </button>
+  </form>
+} @else if (errorServidor()) {
+  <p class="alerta alerta-error" role="alert">{{ errorServidor() }}</p>
+}

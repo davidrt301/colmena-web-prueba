@@ -1,0 +1,58 @@
+.selector-dia {
+    min-width: 180px;
+  }
+  
+  .agenda {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-sm);
+  }
+  
+  /* Una fila por reserva: hora, quién y dónde, valor y acciones */
+  .turno {
+    display: grid;
+    grid-template-columns: 120px 1fr auto auto;
+    align-items: center;
+    gap: var(--espacio-sm);
+    padding: var(--espacio-sm) var(--espacio-md);
+  }
+  
+  .turno.cancelada {
+    opacity: 0.6;
+  }
+  
+  .hora {
+    font-weight: 800;
+    color: var(--miel-oscura);
+  }
+  
+  .detalle {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .detalle span,
+  .detalle small {
+    color: var(--texto-suave);
+    font-size: var(--texto-sm);
+  }
+  
+  .acciones {
+    display: flex;
+    gap: var(--espacio-xs);
+  }
+  
+  .agenda-esqueleto {
+    height: 240px;
+  }
+  
+  @media (max-width: 640px) {
+    .turno {
+      grid-template-columns: 1fr auto;
+    }
+  
+    .detalle {
+      grid-column: 1 / -1;
+    }
+  }

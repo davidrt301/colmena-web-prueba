@@ -1,0 +1,51 @@
+<main class="login">
+    <form class="tarjeta formulario" (submit)="crearCuenta($event)" novalidate>
+      <div class="marca">
+        <img src="favicon.svg" alt="" width="44" height="44">
+        <span>Colmena <small>Coworking</small></span>
+      </div>
+  
+      <div>
+        <h1 class="titulo-pagina">Crea tu cuenta</h1>
+        <p class="subtitulo">Hazte miembro y reserva desde hoy.</p>
+      </div>
+  
+      @if (errores().length > 0) {
+        <ul class="alerta alerta-error" role="alert" data-testid="errores-registro">
+          @for (e of errores(); track e) {
+            <li>{{ e }}</li>
+          }
+        </ul>
+      }
+  
+      @if (error()) {
+        <p class="alerta alerta-error" role="alert" data-testid="error-registro">{{ error() }}</p>
+      }
+  
+      <label class="campo">
+        <span>Nombre completo</span>
+        <input name="nombre" autocomplete="name" maxlength="80" autofocus>
+      </label>
+  
+      <label class="campo">
+        <span>Email</span>
+        <input name="email" type="email" autocomplete="email">
+      </label>
+  
+      <label class="campo">
+        <span>Contraseña (mínimo 8 caracteres)</span>
+        <input name="password" type="password" autocomplete="new-password">
+      </label>
+  
+      <label class="campo">
+        <span>Repite la contraseña</span>
+        <input name="confirmacion" type="password" autocomplete="new-password">
+      </label>
+  
+      <button type="submit" class="btn btn-primario btn-bloque" [disabled]="cargando()">
+        {{ cargando() ? 'Creando cuenta...' : 'Crear cuenta' }}
+      </button>
+  
+      <p class="alterno">¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a></p>
+    </form>
+  </main>

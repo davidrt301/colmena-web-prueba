@@ -1,0 +1,48 @@
+<header class="encabezado-pagina">
+    <div>
+      <h1 class="titulo-pagina">Panel</h1>
+      <p class="subtitulo">Cómo va Colmena en {{ mes }}</p>
+    </div>
+  </header>
+  
+  @if (error()) {
+    <p class="alerta alerta-error" role="alert">{{ error() }}</p>
+  }
+  
+  @if (resumen(); as r) {
+    <section class="indicadores" aria-label="Indicadores del mes">
+      <article class="tarjeta indicador">
+        <span class="numero" data-testid="reservas-hoy">{{ r.reservasHoy }}</span>
+        <span class="etiqueta">Reservas hoy</span>
+      </article>
+      <article class="tarjeta indicador destacado">
+        <span class="numero" data-testid="ingresos-mes">{{ pesos(r.ingresosMes) }}</span>
+        <span class="etiqueta">Ingresos del mes</span>
+      </article>
+      <article class="tarjeta indicador">
+        <span class="numero">{{ r.reservasMes }}</span>
+        <span class="etiqueta">Reservas del mes</span>
+      </article>
+      <article class="tarjeta indicador">
+        <span class="numero">{{ r.miembrosActivos }}</span>
+        <span class="etiqueta">Miembros activos</span>
+      </article>
+    </section>
+  
+    <section class="tarjeta ocupacion">
+      <h2 class="titulo-seccion">Ocupación del mes por espacio</h2>
+      <ul class="barras">
+        @for (o of r.ocupacionMes; track o.espacio) {
+          <li class="fila" data-testid="ocupacion">
+            <span class="nombre">{{ o.espacio }}</span>
+            <span class="pista">
+              <span class="relleno" [style.width.%]="ancho(o.horasReservadas)"></span>
+            </span>
+            <span class="dato">{{ o.horasReservadas.toLocaleString('es-CO') }} h · {{ pesos(o.ingresos) }}</span>
+          </li>
+        }
+      </ul>
+    </section>
+  } @else if (!error()) {
+    <div class="esqueleto panel-esqueleto"></div>
+  }

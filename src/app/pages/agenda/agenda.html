@@ -1,0 +1,57 @@
+<header class="encabezado-pagina">
+    <div>
+      <h1 class="titulo-pagina">Agenda</h1>
+      <p class="subtitulo">Quién viene y a qué espacio</p>
+    </div>
+    <label class="campo selector-dia">
+      <span>Día</span>
+      <input type="date" [value]="fecha()" (change)="cambiarFecha($event)" data-testid="fecha-agenda">
+    </label>
+  </header>
+  
+  @if (error()) {
+    <p class="alerta alerta-error" role="alert">{{ error() }}</p>
+  }
+  
+  @if (cargando()) {
+    <div class="esqueleto agenda-esqueleto"></div>
+  } @else {
+    <ul class="agenda">
+      @for (r of reservas(); track r.id) {
+        <li class="tarjeta turno" [class.cancelada]="r.estado === 'CANCELADA'" data-testid="turno">
+          <span class="hora">{{ r.horaInicio.slice(0, 5) }} – {{ r.horaFin.slice(0, 5) }}</span>
+  
+          <div class="detalle">
+            <strong>{{ r.espacioNombre }}</strong>
+            <span>{{ r.usuarioNombre }} · {{ r.asistentes }} {{ r.asistentes === 1 ? 'persona' : 'personas' }}</span>
+            @if (r.nota) {
+              <small>{{ r.nota }}</small>
+            }
+          </div>
+  
+          <strong class="valor">{{ pesos(r.valorTotal) }}</strong>
+  
+          <div class="acciones">
+            @if (r.estado === 'CANCELADA') {
+              <span class="chip chip-neutro">Cancelada</span>
+            } @else if (sePuedeCancelar(r)) {
+              @if (porConfirmar() === r.id) {
+                <button type="button" class="btn btn-peligro btn-sm" (click)="confirmarCancelacion(r)">
+                  Sí, cancelar
+                </button>
+                <button type="button" class="btn btn-secundario btn-sm" (click)="porConfirmar.set(null)">No</button>
+              } @else {
+                <button type="button" class="btn btn-secundario btn-sm" (click)="porConfirmar.set(r.id)">
+                  Cancelar
+                </button>
+              }
+            } @else {
+              <span class="chip chip-exito">Confirmada</span>
+            }
+          </div>
+        </li>
+      } @empty {
+        <li class="estado-vacio" data-testid="agenda-vacia">No hay reservas para este día.</li>
+      }
+    </ul>
+  }

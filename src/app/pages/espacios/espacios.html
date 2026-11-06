@@ -1,0 +1,96 @@
+<header class="encabezado-pagina">
+  <div>
+    <h1 class="titulo-pagina">Espacios</h1>
+    @if (gestiona()) {
+      <p class="subtitulo">Catálogo del coworking · {{ espacios().length }} espacios, {{ inactivos() }} {{ inactivos() === 1 ? 'inactivo' : 'inactivos' }}</p>
+    } @else {
+      <p class="subtitulo">Elige dónde trabajar hoy</p>
+    }
+  </div>
+
+  <a *appSiPuede="'ESPACIOS_GESTIONAR'" routerLink="/espacios/nuevo" class="btn btn-primario"
+     data-testid="boton-nuevo-espacio">
+    Nuevo espacio
+  </a>
+
+  <div class="filtros" role="group" aria-label="Filtrar por tipo">
+    @for (opcion of filtros; track opcion.valor) {
+      <button
+        type="button"
+        class="filtro"
+        [class.activo]="filtro() === opcion.valor"
+        [attr.aria-pressed]="filtro() === opcion.valor"
+        (click)="filtro.set(opcion.valor)">
+        {{ opcion.texto }}
+      </button>
+    }
+  </div>
+</header>
+
+@if (error()) {
+  <p class="alerta alerta-error" role="alert">{{ error() }}</p>
+}
+
+@if (cargando()) {
+  <div class="grilla">
+    <div class="esqueleto tarjeta-esqueleto"></div>
+    <div class="esqueleto tarjeta-esqueleto"></div>
+    <div class="esqueleto tarjeta-esqueleto"></div>
+  </div>
+} @else {
+  <div class="grilla">
+    @for (e of espaciosFiltrados(); track e.id) {
+      <article class="espacio tarjeta" [class.inactivo]="!e.activo">
+        <div class="foto">
+          @if (e.imagenUrl) {
+            <img [src]="e.imagenUrl" [alt]="'Foto de ' + e.nombre" loading="lazy">
+          }
+          <span class="chip chip-miel tipo">{{ nombreTipo[e.tipo] }}</span>
+          @if (!e.activo) {
+            <span class="chip chip-neutro estado">Inactivo</span>
+          }
+        </div>
+
+        <div class="cuerpo">
+          <h2 class="nombre">{{ e.nombre }}</h2>
+          <p class="descripcion">{{ e.descripcion }}</p>
+
+          <dl class="datos">
+            <div>
+              <dt>Capacidad</dt>
+              <dd>{{ e.capacidad }} {{ e.capacidad === 1 ? 'persona' : 'personas' }}</dd>
+            </div>
+            <div>
+              <dt>Por hora</dt>
+              <dd>{{ pesos(e.precioHora) }}</dd>
+            </div>
+          </dl>
+
+          <div class="acciones">
+            @if (e.activo) {
+              <a *appSiPuede="'RESERVAS_CREAR'" [routerLink]="['/espacios', e.id, 'reservar']"
+                 class="btn btn-primario btn-sm" data-testid="boton-reservar">
+                Reservar
+              </a>
+            }
+            <a *appSiPuede="'ESPACIOS_GESTIONAR'" [routerLink]="['/espacios', e.id, 'editar']"
+               class="btn btn-secundario btn-sm" data-testid="boton-editar">
+              Editar
+            </a>
+            <button
+              *appSiPuede="'ESPACIOS_GESTIONAR'"
+              type="button"
+              class="btn btn-sm"
+              [class.btn-peligro]="e.activo"
+              [class.btn-primario]="!e.activo"
+              (click)="alternarEstado(e)">
+              {{ e.activo ? 'Desactivar' : 'Activar' }}
+            </button>
+          </div>
+        </div>
+      </article>
+    } @empty {
+      <p class="estado-vacio sin-resultados">No hay espacios de este tipo.</p>
+    }
+  </div>
+}

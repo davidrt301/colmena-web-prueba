@@ -1,0 +1,98 @@
+<a routerLink="/espacios" class="volver">← Volver a espacios</a>
+
+@if (errorCarga()) {
+  <p class="alerta alerta-error" role="alert">{{ errorCarga() }}</p>
+}
+
+@if (espacio(); as e) {
+  <div class="reservar">
+    <section class="tarjeta ficha">
+      @if (e.imagenUrl) {
+        <img [src]="e.imagenUrl" [alt]="'Foto de ' + e.nombre">
+      }
+      <div class="ficha-cuerpo">
+        <h1 class="titulo-pagina" data-testid="nombre-espacio">{{ e.nombre }}</h1>
+        <p class="subtitulo">{{ e.descripcion }}</p>
+        <p class="datos">
+          <span>{{ pesos(e.precioHora) }} por hora</span>
+          <span>Hasta {{ e.capacidad }} {{ e.capacidad === 1 ? 'persona' : 'personas' }}</span>
+        </p>
+
+        @if (fecha()) {
+          <h2 class="titulo-ocupado">Ocupado ese día</h2>
+          <ul class="ocupadas">
+            @for (f of ocupadas(); track f.horaInicio) {
+              <li class="chip chip-neutro">{{ f.horaInicio.slice(0, 5) }} – {{ f.horaFin.slice(0, 5) }}</li>
+            } @empty {
+              <li class="libre">Todo el día está libre</li>
+            }
+          </ul>
+        }
+      </div>
+    </section>
+
+    <form class="tarjeta formulario" (submit)="reservar($event)" (input)="actualizar($event)" novalidate>
+      <h2 class="titulo-form">Reserva tu espacio</h2>
+
+      <label class="campo">
+        <span>Fecha</span>
+        <input name="fecha" type="date" [min]="hoy">
+      </label>
+
+      <div class="horas">
+        <label class="campo">
+          <span>Desde</span>
+          <select name="horaInicio">
+            <option value="">--:--</option>
+            @for (b of bloques.slice(0, -1); track b) {
+              <option [value]="b">{{ b }}</option>
+            }
+          </select>
+        </label>
+        <label class="campo">
+          <span>Hasta</span>
+          <select name="horaFin">
+            <option value="">--:--</option>
+            @for (b of bloques.slice(1); track b) {
+              <option [value]="b">{{ b }}</option>
+            }
+          </select>
+        </label>
+      </div>
+
+      <label class="campo">
+        <span>Asistentes</span>
+        <input name="asistentes" type="number" min="1" [max]="e.capacidad" value="1">
+      </label>
+
+      <label class="campo">
+        <span>Nota (opcional)</span>
+        <textarea name="nota" rows="2" maxlength="200" placeholder="Ej: reunión con cliente"></textarea>
+      </label>
+
+      @if (horas() > 0) {
+        <p class="resumen" data-testid="resumen-valor" aria-live="polite">
+          <span>{{ horas().toLocaleString('es-CO') }} {{ horas() === 1 ? 'hora' : 'horas' }}</span>
+          <strong>{{ pesos(valor()) }}</strong>
+          <small>Se paga en recepción</small>
+        </p>
+      }
+
+      @if (errores().length > 0) {
+        <ul class="alerta alerta-error" role="alert" data-testid="errores-formulario">
+          @for (error of errores(); track error) {
+            <li>{{ error }}</li>
+          }
+        </ul>
+      }
+
+      @if (errorServidor()) {
+        <p class="alerta alerta-error" role="alert" data-testid="error-reserva">{{ errorServidor() }}</p>
+      }
+
+      <button type="submit" class="btn btn-primario btn-bloque" [disabled]="enviando()">
+        {{ enviando() ? 'Reservando...' : 'Confirmar reserva' }}
+      </button>
+    </form>
+  </div>
+}

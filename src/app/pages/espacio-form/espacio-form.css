@@ -1,0 +1,38 @@
+.volver {
+    display: inline-block;
+    margin-bottom: var(--espacio-sm);
+    color: var(--texto-suave);
+    font-weight: 700;
+    text-decoration: none;
+  }
+  
+  .formulario {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-sm);
+    max-width: 640px;
+    padding: var(--espacio-md);
+  }
+  
+  .pareja {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--espacio-sm);
+  }
+  
+  @media (max-width: 640px) {
+    .pareja {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  /* Igual que en Reservar: el select y el textarea con el mismo aspecto que los input */
+  .campo select,
+  .campo textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid var(--borde);
+    border-radius: var(--radio-sm);
+    background: var(--superficie);
+    font: inherit;
+  }
